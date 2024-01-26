@@ -15,9 +15,21 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <time.h>
 
 //user's head file
+#include "color.h"
+#include "common.h"
 
 
+//测试宏
+#ifdef _D
+#define DBG(formt, arg...) {\
+    printf("[ %s : %s : %d ] ", __FILE__, __func__, __LINE__);\
+    printf(formt, ##arg);\
+}
+#else
+#define DBG(formt, arg...)
+#endif
 
 #endif
