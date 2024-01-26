@@ -16,6 +16,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <time.h>
+#include <dirent.h>
+#include <pwd.h>
+#include <grp.h>
 
 //user's head file
 #include "color.h"
