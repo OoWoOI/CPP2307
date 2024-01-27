@@ -14,6 +14,7 @@
 #define LOG_LEVEL_ERROR 2
 
 void log_event(int level, const char *message, const char *filename);
-
+int make_block(int fd);
+int make_nonblock(int fd);
 
 #endif

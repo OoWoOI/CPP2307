@@ -19,6 +19,7 @@
 #include <dirent.h>
 #include <pwd.h>
 #include <grp.h>
+#include <sys/select.h>
 
 //user's head file
 #include "color.h"
