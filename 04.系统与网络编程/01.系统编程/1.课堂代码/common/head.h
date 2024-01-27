@@ -21,6 +21,7 @@
 #include <grp.h>
 #include <sys/select.h>
 #include <sys/wait.h>
+#include <sys/file.h>
 
 //user's head file
 #include "color.h"
