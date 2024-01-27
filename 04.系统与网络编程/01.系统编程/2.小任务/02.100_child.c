@@ -20,7 +20,7 @@ int main() {
             printf("I'm a child pid = %d, num = %d\n", getpid(), i + 1);
             return 0;
         }
-        usleep(100);
+        wait(NULL);
     }
     
     return 0;
