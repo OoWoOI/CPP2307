@@ -20,6 +20,7 @@
 #include <pwd.h>
 #include <grp.h>
 #include <sys/select.h>
+#include <sys/wait.h>
 
 //user's head file
 #include "color.h"
