@@ -22,6 +22,9 @@
 #include <sys/select.h>
 #include <sys/wait.h>
 #include <sys/file.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <pthread.h>
 
 //user's head file
 #include "color.h"

@@ -11,9 +11,9 @@
 //要求: (1) 必须使用fork、open、flock
 
 void showsum(int cnt); //打印计算机结果
-int getSum(int fd);//获取计算结果
-void setSum(int fd, int sum);//更新计算结果
-int getFD();//获取一个文件描述符
+int getNum(int fd);//获取计算结果
+void setNum(int fd, int sum);//更新计算结果
+int getFD(const char *pathname);//获取一个文件描述符
 
 int main(int argc, char **argv) {
     int opt, cnt;
@@ -35,7 +35,8 @@ void showsum(int cnt) {
     
     pid_t pid;
     static int sum = 0;
-    int fd = getFD();
+    int fd_sum = getFD("./sum.txt");
+    int fd_num = getFD("./num.txt");
 
     for (int i = 0; i < cnt; i++) {
         if ((pid = fork()) < 0) {
@@ -45,23 +46,42 @@ void showsum(int cnt) {
         
         if (pid == 0) {
             //子进程处理数据加和
-            if (flock(fd, LOCK_EX) < 0) {
-                perror("flock LOCK_EX");
-                exit(1);
+            if (flock(fd_sum, LOCK_EX) < 0) {
+                perror("flock LOCK_EX fd_sum");
+                exit(EXIT_FAILURE);
+            }
+
+            if (flock(fd_num, LOCK_EX) < 0) {
+                perror("flock LOCK_EX fd_num");
+                exit(EXIT_FAILURE);
             }
             
-            int sum = getSum(fd) + 1;
-            printf("pid = %d, sum = %d\n", getpid(), sum);
-            if (sum > 100) {
-                flock(fd, LOCK_UN);
+            int sum = getNum(fd_sum);
+            int num = getNum(fd_num);
+        
+            if (num >= 100) {
+                flock(fd_num, LOCK_UN);
+                flock(fd_sum, LOCK_UN);
                 exit(EXIT_SUCCESS) ;
-            }
+            } 
             
-            if (flock(fd, LOCK_UN) < 0) {
+            sum += (num + 1);
+            num++;
+
+            setNum(fd_sum, sum);
+            setNum(fd_num, num);
+            
+            if (flock(fd_sum, LOCK_UN) < 0) {
                 perror("flock LOCK_UN");
-                exit(1);
+                exit(EXIT_FAILURE);
             }
-            close(fd);
+
+            if (flock(fd_num, LOCK_UN) < 0) {
+                perror("flock LOCK_UN");
+                exit(EXIT_FAILURE);
+            }
+            close(fd_sum);
+            close(fd_num);
             exit(EXIT_SUCCESS);
         } 
     }
@@ -69,13 +89,14 @@ void showsum(int cnt) {
     for (int i = 0; i < cnt; i++) wait(NULL);//等待所以子进程都结束
     
     //父进程打印累加和
-    printf("sum = %d\n", getSum(fd));
-    close(fd);
+    printf("sum = %d\n", getNum(fd_sum));
+    close(fd_sum);
+    close(fd_num);
     return ;
 }
 
-int getFD() {
-    int fd = open("./tmp.txt", O_CREAT | O_RDWR, 0644);
+int getFD(const char *pathname) {
+    int fd = open(pathname, O_CREAT | O_RDWR, 0644);
     if (fd == -1) {
         perror("open");
         exit(1);
@@ -83,15 +104,15 @@ int getFD() {
     return fd;
 }
 
-int getSum(int fd) {
+int getNum(int fd) {
     lseek(fd, 0, SEEK_SET);
-    int sum;
-    read(fd, &sum, sizeof(int));
-    return sum;
+    int num = 1;
+    read(fd, &num, sizeof(int));
+    return num;
 }
 
-void setSum(int fd, int sum) {
+void setNum(int fd, int num) {
     lseek(fd, 0, SEEK_SET);
-    write(fd, &sum, sizeof(int));
+    write(fd, &num, sizeof(int));
     return ;
 }
