@@ -25,6 +25,9 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <pthread.h>
+#include <signal.h>
+#include <errno.h>
+
 
 //user's head file
 #include "color.h"
