@@ -51,11 +51,14 @@ int main(int argc, char **argv) {
         int ret = scanf("%[^\n]s", msg);
         getchar();
         if (ret == 0) continue;
-    a: pthread_mutex_lock(&share_memory->mutex);
+  /**  a: pthread_mutex_lock(&share_memory->mutex);
         if (strlen(share_memory->msg)) {
             pthread_mutex_unlock(&share_memory->mutex);
             goto a;
-        }
+        }**/
+        pthread_mutex_lock(&share_memory->mutex);
+        while (strlen(share_memory->msg) != 0)
+            pthread_cond_wait(&share_memory->cond, &share_memory->mutex);        
         strcpy(share_memory->name, name);
         strcpy(share_memory->msg, msg);
         pthread_mutex_unlock(&share_memory->mutex);

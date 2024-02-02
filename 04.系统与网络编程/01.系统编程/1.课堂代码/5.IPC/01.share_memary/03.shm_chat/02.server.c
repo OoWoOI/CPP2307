@@ -8,10 +8,12 @@
 #include "./common/head.h"
 #include "./chat.h"
 
-void output(struct MSG *arg) {
-    if (strlen(arg->name) == 0 || strlen(arg->msg) == 0) return ;
-    printf("[%s] : %s\n", arg->name, arg->msg);
-    memset(arg, 0, sizeof(struct MSG));//将共享内存重置为空;
+struct MSG *share_memory = NULL;
+
+void output(int signum) {
+    if (strlen(share_memory->name) == 0 || strlen(share_memory->msg) == 0) return ;
+    printf("[%s] : %s\n", share_memory->name, share_memory->msg);
+    memset(share_memory, 0, sizeof(struct MSG));//将共享内存重置为空;
     return ;
 }
 
@@ -28,17 +30,26 @@ int main() {
         exit(1);
     }
     
-    struct MSG *share_memory = NULL;
 
     if ((share_memory = shmat(shmid, NULL, 0)) == NULL) {
         perror("shmat");
         exit(1);
     }
 
-    //创建共享内存后就可以开始完成，信息读取的功能
+    //注册一个信号驱动事件
+    signal(SIGALRM, output);
+    
+    struct itimerval itimer;
+    itimer.it_value.tv_sec = 10;
+    itimer.it_value.tv_usec = 0;
+    itimer.it_interval.tv_sec = 1;
+    itimer.it_interval.tv_usec = 0;
 
+    setitimer(ITIMER_REAL, &itimer, NULL);
+    
+    //创建共享内存后就可以开始完成，信息读取的功能
     while (1) {
-        output(share_memory);
+        //output(share_memory);
         sleep(1);//休眠一秒
     }
 

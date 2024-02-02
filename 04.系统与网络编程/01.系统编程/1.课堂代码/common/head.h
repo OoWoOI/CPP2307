@@ -27,7 +27,7 @@
 #include <pthread.h>
 #include <signal.h>
 #include <errno.h>
-
+#include <sys/time.h>
 
 //user's head file
 #include "color.h"
