@@ -28,6 +28,8 @@
 #include <signal.h>
 #include <errno.h>
 #include <sys/time.h>
+#include <sys/sem.h>
+#include <semaphore.h>
 
 //user's head file
 #include "color.h"

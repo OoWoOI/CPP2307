@@ -16,5 +16,8 @@
 void log_event(int level, const char *message, const char *filename);
 int make_block(int fd);
 int make_nonblock(int fd);
+semaphore make_semaphore(int value);
+void P(semaphore sem);
+void V(semaphore sem);
 
 #endif

@@ -7,7 +7,36 @@
 
 #include "head.h"
 
-//修改文件描述符
+semaphore make_semaphore(int value) {
+    semaphore sem = malloc(sizeof(semaphore));
+    int ret = sem_init(sem, 0, value);
+    if (ret != 0) {
+        perror("sem_init failed !");
+        exit(1);
+    }
+
+    return sem;
+}
+
+void P(semaphore sem) {
+    int ret = sem_wait(sem);
+
+    if (ret != 0) {
+        perror("sem_wait failed !");
+        exit(1);
+    }
+    
+    return ;
+}
+
+void V(semaphore sem) {
+    
+
+    return ;
+}
+
+
+//修改文件述符
 int make_block(int fd) {
     int flag;
     if ((flag = fcntl(fd, F_GETFL)) < 0) {
