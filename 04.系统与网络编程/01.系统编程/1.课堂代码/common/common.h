@@ -13,9 +13,12 @@
 #define LOG_LEVEL_WARNING 1
 #define LOG_LEVEL_ERROR 2
 
+typedef sem_t * semaphore;
+void perror_exit(const char *msg);
 void log_event(int level, const char *message, const char *filename);
 int make_block(int fd);
 int make_nonblock(int fd);
+void rsleep(double sec);
 semaphore make_semaphore(int value);
 void P(semaphore sem);
 void V(semaphore sem);

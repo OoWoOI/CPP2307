@@ -5,7 +5,19 @@
 	> Created Time: Fri 26 Jan 2024 09:11:23 PM CST
  ************************************************************************/
 
-#include "head.h"
+#include "./head.h"
+
+void rsleep(double sec) {
+    long max = sec * 1000000;
+    srand((unsigned)time(0));
+    long value = rand();
+    usleep(value % max);
+}
+
+void perror_exit(const char *msg) {
+    perror(msg);
+    exit(1);
+}
 
 semaphore make_semaphore(int value) {
     semaphore sem = malloc(sizeof(semaphore));
@@ -30,8 +42,8 @@ void P(semaphore sem) {
 }
 
 void V(semaphore sem) {
-    
-
+    int ret = sem_post(sem); 
+    if (ret != 0) perror_exit("sem_post");
     return ;
 }
 
