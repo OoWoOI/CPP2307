@@ -2,6 +2,12 @@
 	> File Name: head.h
 	> Author: 
 	> Mail: 
+	> Created Time: Thu 22 Feb 2024 04:14:35 PM CST
+ ************************************************************************/
+/*************************************************************************
+	> File Name: head.h
+	> Author: 
+	> Mail: 
 	> Created Time: Mon 22 Jan 2024 06:58:28 PM CST
  ************************************************************************/
 
@@ -30,11 +36,19 @@
 #include <sys/time.h>
 #include <sys/sem.h>
 #include <semaphore.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>  
+#include <netinet/udp.h>
+#include <ctype.h>
 
 //user's head file
 #include "color.h"
 #include "common.h"
-
+#include "mytcp.h"
+#include "threadpool.h"
+#include "myudp.h"
+#include "file.h"
 
 //测试宏
 #ifdef _D

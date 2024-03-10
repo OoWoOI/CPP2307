@@ -9,7 +9,7 @@
 #include "./pthread_pool.h"
 
 //任务队列初始化
-void task_queue_init(struct task_queue *tq, int size) {
+void task_queue_init_1(struct task_queue *tq, int size) {
     tq->head = tq->tail = tq->total = 0;
     tq->size = size;
     pthread_mutex_init(&tq->mutex, NULL);
@@ -19,7 +19,7 @@ void task_queue_init(struct task_queue *tq, int size) {
 }
 
 //任务队列入队
-void task_queue_push(struct task_queue *tq, char *str) {
+void task_queue_push_1(struct task_queue *tq, char *str) {
     pthread_mutex_lock(&tq->mutex);
     if (tq->total == tq->size) {
         pthread_mutex_unlock(&tq->mutex);
@@ -35,7 +35,7 @@ void task_queue_push(struct task_queue *tq, char *str) {
     return ;
 }
 
-char *task_queue_pop(struct task_queue *tq) {
+char *task_queue_pop_1(struct task_queue *tq) {
     pthread_mutex_lock(&tq->mutex);
     while (tq->total == 0) {
         pthread_cond_wait(&tq->cond, &tq->mutex);
@@ -52,7 +52,7 @@ char *task_queue_pop(struct task_queue *tq) {
     return str;
 }
 
-void *thread_run(void *arg) {
+void *thread_run_1(void *arg) {
     pthread_detach(pthread_self());//分离线程
     struct task_queue *tq = (struct task_queue *)arg;
     while (1) {
